@@ -97,7 +97,7 @@ app.post('/api/events', requireAuth.auth(), (req, res, next) => {
 
 
 
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
   console.log(`App listening at http://localhost:${process.env.PORT}`)
 });
 // end of spaghetti code
