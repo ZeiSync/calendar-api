@@ -28,7 +28,7 @@ const getToken = (req) => {
 
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, 'SECRET_TOKEN :)', (err, data) => {
+    return jwt.verify(token, process.env.SECRET_TOKEN, (err, data) => {
       if (err) {
         return {
           message: 'Forbidden',

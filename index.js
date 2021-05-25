@@ -1,7 +1,7 @@
 // checkout my spaghetti code
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = 3000;
 
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
@@ -20,7 +20,7 @@ app.get('/', (req, res, next) => {
   res.json('hello ;3');
 })
 // SECRET_TOKEN :)))
-const generateAccessToken = (user) => jwt.sign({ user }, 'SECRET_TOKEN :)', { expiresIn: '1d' });
+const generateAccessToken = (user) => jwt.sign({ user }, process.env.SECRET_TOKEN, { expiresIn: '1d' });
 
 app.post('/api/auth/login', (req, res, next) => {
   const { email, password } = req.body;
@@ -98,6 +98,6 @@ app.post('/api/events', requireAuth.auth(), (req, res, next) => {
 
 
 app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`)
+  console.log(`App listening at http://localhost:${process.env.PORT}`)
 });
 // end of spaghetti code
