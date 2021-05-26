@@ -7,15 +7,6 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-//change to https
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-
-const credentials = { key: privateKey, cert: certificate };
-
 // remember the good old days 
 const db = require("./db");
 
@@ -25,16 +16,6 @@ app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
-// const forceSsl = function (req, res, next) {
-//   if (req.headers['x-forwarded-proto'] !== 'https') {
-//     return res.redirect(['https://', req.get('Host'), req.url].join(''));
-//   }
-//   return next();
-// };
-
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(forceSsl);
-// }
 
 app.get('/', (req, res, next) => {
   res.json('hello ;3');
@@ -117,7 +98,7 @@ app.post('/api/events', requireAuth.auth(), (req, res, next) => {
 
 
 
-app.listen(process.env.PORT, () => {
-  console.log(`App listening at port ${process.env.PORT}`)
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`App listening at port ${process.env.PORT || 3000}`)
 });
 // end of spaghetti code
