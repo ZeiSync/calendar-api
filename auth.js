@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const db = require("./db");
+const User = require('./models/user');
 
 const getToken = (req) => {
   let authorization = null;
@@ -28,15 +28,14 @@ const getToken = (req) => {
 
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, process.env.SECRET_TOKEN, (err, data) => {
+    return jwt.verify(token, process.env.SECRET_TOKEN, async (err, data) => {
       if (err) {
         return {
           message: 'Forbidden',
           status: 403,
         };
       } else {
-        const user = db.get('users').find({ id: data.user }).value();
-        return user;
+        return await User.findOne({ _id: data.user }).lean();
       }
     });
   } catch (error) {
