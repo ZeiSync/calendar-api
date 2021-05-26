@@ -22,7 +22,7 @@ app.get('/', (req, res, next) => {
 // SECRET_TOKEN :)))
 const generateAccessToken = (user) => jwt.sign({ user }, process.env.SECRET_TOKEN, { expiresIn: '1d' });
 
-app.post('/api/auth/login', (req, res, next) => {
+app.post('/api/auth/login', async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = db.get('users').find({ email }).value();
@@ -33,7 +33,7 @@ app.post('/api/auth/login', (req, res, next) => {
       });
     }
 
-    const match = bcrypt.compareSync(password, user.password);
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({
         message: 'wrong_password',
