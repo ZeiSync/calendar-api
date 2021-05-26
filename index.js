@@ -9,7 +9,6 @@ const bcrypt = require('bcrypt');
 
 // remember the good old days 
 const db = require("./db");
-
 const requireAuth = require('./auth');
 
 app.use(cors());
