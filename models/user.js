@@ -16,7 +16,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    event: [{ type: Schema.Types.ObjectId, ref: 'Event' }]
+    events: [{ type: Schema.Types.ObjectId, ref: 'Event' }]
   },
   {
     timestamps: true,
