@@ -12,4 +12,6 @@ router
   .get(requireAuth.auth(), controllers.getUserEvents)
   .post(requireAuth.auth(), controllers.postUserEvent);
 
+router.route('/events/:id').delete(requireAuth.auth(), controllers.deleteUserEvent);
+
 module.exports = router;

@@ -47,8 +47,8 @@ exports.login = async (req, res, next) => {
   }
 };
 
-exports.getUserEvents = (req, res, next) => {
-  const user = req.user;
+exports.getUserEvents = async (req, res, next) => {
+  const user = await User.findOne({ _id: user._id }).lean();
   res.status(200).json({
     events: user.events
   });
@@ -82,3 +82,25 @@ exports.postUserEvent = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.deleteUserEvent = async (req, res, next) => {
+  const { id } = req.params;
+  const user = req.params;
+  try {
+    const event = await Event.findById(id).lean();
+    if (event) {
+      return sres.status(404).json({
+        message: 'event_not_found',
+        statusCode: 404,
+      });
+    }
+    await Event.deleteOne({ _id: event._id });
+    await User.updateOne({ _id: user._id }, { $pull: { events: event._id } });
+    const updatedUser = await User.findOne({ _id: user._id }).lean();
+    return res.status(200).json({
+      events: updatedUser.events
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
