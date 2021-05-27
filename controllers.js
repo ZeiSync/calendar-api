@@ -65,7 +65,7 @@ exports.postUserEvent = async (req, res, next) => {
     });
   }
 
-  if (new Date(date.trim())) {
+  if (new Date(date.trim()).toString() === 'Invalid Date') {
     return res.status(400).json({
       message: 'date_field_is_not_a_date',
       statusCode: 400,
@@ -73,7 +73,7 @@ exports.postUserEvent = async (req, res, next) => {
   }
   try {
     const event = await Event.create({ tiltle, date, description });
-    await User.updateOne({ _id: user._id }, { $push: { events: event._id } })
+    await User.updateOne({ _id: user._id }, { $push: { events: event._id } });
 
     const user = await User.find({ _id: user._id }).populate('events').lean();
     return res.status(200).json({
