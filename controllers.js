@@ -17,7 +17,7 @@ exports.login = async (req, res, next) => {
   }
 
   try {
-    const user = await User.findOne({ email }).lean();
+    const user = await User.findOne({ email }).populate("events").lean();
     if (!user) {
       return res.status(401).json({
         message: 'incorrect_email_or_password',
