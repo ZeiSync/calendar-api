@@ -85,18 +85,20 @@ exports.postUserEvent = async (req, res, next) => {
 
 exports.deleteUserEvent = async (req, res, next) => {
   const { id } = req.params;
-  const user = req.params;
+  const user = req.user;
   try {
     const event = await Event.findById(id).lean();
-    if (event) {
-      return sres.status(404).json({
+    if (!event) {
+      return res.status(404).json({
         message: 'event_not_found',
         statusCode: 404,
       });
     }
     await Event.deleteOne({ _id: event._id });
     await User.updateOne({ _id: user._id }, { $pull: { events: event._id } });
-    const updatedUser = await User.findOne({ _id: user._id }).lean();
+    console.log('updated');
+    const updatedUser = await User.findById(user._id).populate('events').lean();
+    console.log('updateduser', updatedUser);
     return res.status(200).json({
       events: updatedUser.events
     });
