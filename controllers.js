@@ -75,9 +75,9 @@ exports.postUserEvent = async (req, res, next) => {
     const event = await Event.create({ title, date, description });
     await User.updateOne({ _id: user._id }, { $push: { events: event._id } });
 
-    const user = await User.find({ _id: user._id }).populate('events').lean();
+    const updatedUser = await User.find({ _id: user._id }).populate('events').lean();
     return res.status(200).json({
-      events: user.events,
+      events: updatedUser.events,
     });
   } catch (error) {
     return next(error);
